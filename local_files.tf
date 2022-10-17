@@ -11,3 +11,11 @@ resource "aws_instance" "jenkins server"
   tags = {
     Name = "JenkinsServer"
  }
+  
+ resource "aws_instance" "jenkins server"
+{
+  ami = var.ami
+  instance_type = var.instance_type
+  tags = {
+    Name = "JenkinsServer"
+ }
