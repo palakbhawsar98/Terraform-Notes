@@ -66,5 +66,13 @@ terraform apply
 ```
 terraform destroy 
 ```
+##### Variables in terraform
 
+varibles can be defined in variables .tf file and can be used in configuration files as **var.variable_name**
+
+##### Types of variables
+- string ("file")
+- bool (true/false)
+- number (7)
+- any (Default value)
 
