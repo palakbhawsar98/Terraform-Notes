@@ -76,3 +76,13 @@ varibles can be defined in variables .tf file and can be used in configuration f
 - number (7)
 - any (Default value)
 
+
+##### How to define variables in variables.tf file using parameter (default, type, and description)
+```
+variable "filename" {
+   deafult = "test"
+   type = string
+   description = "configuration file namee"
+   }
+```
+##### Define envtronment variables in terraform.tfvars or terraform.tfvars.json
