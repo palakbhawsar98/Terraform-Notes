@@ -86,3 +86,43 @@ variable "filename" {
    }
 ```
 ##### Define envtronment variables in terraform.tfvars or terraform.tfvars.json
+
+- This command  will show the sysntax used is correct or not
+```
+terraform validate
+```
+- This command scans the configuratiion files in the current working directory and formats the code. It is used to improve the readability of files.
+```
+terraform fmt
+```
+- This command will list all the providers used in configuration file
+```
+terraform providers
+```
+- This command will mirror the provider configuration in new path.
+```
+terraform providers mirror /<file_path>
+```
+- This command will print all the output variables in the configuration files
+```
+terraform output
+```
+- This command is used to sync the terraform with real-world resources
+```
+terraform refresh
+```
+#### Terraform Lifecycle Rule
+
+- This is used in configuration file when you don't want your resources to ve dlete before creation of new resources
+```
+lifecycle {
+   create_before_destroy = true
+   }
+```
+- This is used in configuration file when you don't want your old resources to be deleted
+```
+lifecycle {
+   prevent_destroy = true
+   }
+```
+
