@@ -26,6 +26,17 @@ terraform version
 
 *Terraform configuration files are written in HCL to deploy infrastructure resources, this files have .tf extentiuons*
 
+#### To specify specific version of the provider, use required_providers block under terraform.
+```
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "4.35.0"
+    }
+  }
+}
+```
 - **HCL Basics** (HashiCorp Configuration Language)
 ```
 <block> <parameters> {
@@ -83,6 +94,7 @@ variable "filename" {
    deafult = "test"
    type = string
    description = "configuration file namee"
+   sensitive = false
    }
 ```
 ##### Define envtronment variables in terraform.tfvars or terraform.tfvars.json
@@ -125,4 +137,27 @@ lifecycle {
    prevent_destroy = true
    }
 ```
+####  Create aliases
+```
+provider "aws" {
+   region = "us-east-1"
+   alias = "east"
+   }
+   
+   use it -- aws.east
 
+```
+#### Output Variables in Terraform
+Output variables are used to store the vallue of expression in terraform
+```
+output "public_ip_addr" {
+   value = aws_instance.jenkinsserver.public_ip
+   description = "print public ipv4 of Jenkis Server"
+   }
+```
+#### If one resource is dependent on other and we want that resource to be provisioned before use depends_on
+```
+depends_on = [
+     aws_instance.jenkins
+     ]
+```
