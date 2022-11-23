@@ -1,8 +1,8 @@
 terraform {
-  cloud {
+  backend "remote" {
     organization = "organization-name"
     workspaces {
-      name = "learn-tfc-aws"
+      name = "terraform-backend-handson"
     }
   }
 
