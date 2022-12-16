@@ -20,10 +20,10 @@ resource "aws_subnet" "vpc_public_subnet" {
 }
 
 resource "aws_subnet" "vpc_private_subnet" {
+  vpc_id            = aws_vpc.vpc.id
   count             = length(var.subnets_count)
   availability_zone = element(var.availability_zone, count.index)
   cidr_block        = "10.0.${count.index + 2}.0/24"
-  vpc_id            = aws_vpc.vpc.id
 
   tags = {
     Name = "pri-sub-${element(var.availability_zone, count.index)}"
@@ -140,7 +140,7 @@ resource "tls_private_key" "key" {
 
 resource "local_file" "private_rsa_key" {
   content  = tls_private_key.key.private_key_pem
-  filename = "privatekey"
+  filename = "private_rsa_key"
 }
 
 resource "aws_key_pair" "public_rsa_key" {
@@ -153,11 +153,11 @@ resource "aws_instance" "my_app_server" {
   instance_type               = var.instance_size
   key_name                    = aws_key_pair.public_rsa_key.key_name
   count                       = length(var.subnets_count)
-  subnet_id                   = element(aws_subnet.vpc_private_subnet.*.id, count.index)
-  vpc_security_group_ids      = [aws_security_group.vpc_sg.id]
+  subnet_id                   = element(aws_subnet.vpc_public_subnet.*.id, count.index)
+  security_groups             = [aws_security_group.vpc_sg.id]
   associate_public_ip_address = true
 
-  user_data = <<EOF
+  user_data = <<-EOF
   #!/bin/bash
   sudo apt update -y
   sudo apt install apache2 -y
