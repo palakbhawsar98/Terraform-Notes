@@ -1,10 +1,44 @@
 # Terraform
 
-- **Terraform** is an infrastructure as code tool that lets you build, change, and version cloud and on-prem resources safely and efficiently.
+## What is Terraform?
+- Terraform is an open-source infrastructure as a code tool created by HashiCorp, that lets you provision, build, change, and version cloud and on-prem resources. It let's you define both Cloud and on-prem resources in human readable configuration files that you can version, reuse, and share.
 
-- **Infrastructure as Code** Infrastructure as code (IaC) tools allow you to manage infrastructure with configuration files rather than through a graphical user interface. IaC allows you to build, change, and manage your infrastructure in a safe, consistent, and repeatable way by defining resource configurations that you can version, reuse, and share.
+## What is Infrastructure as Code?
+- Infrastructure as code (IaC) is the process that allows you to manage infrastructure with configuration files rather than through a graphical user interface. IaC allows you to build, change, and manage your infrastructure in a safe, consistent, and repeatable way by defining resource configurations that you can version, reuse, and share.
 
-- **Install Terraform** 
+## Why Terraform?
+
+- Manage any Infrastructure
+- Track Infrastructure
+- Reduce time to provision
+- Support multi-cloud Infrastrucure deployment
+- Automate changes
+- Standarize configuration
+- Collaboration
+
+## How does Terraform work?
+
+Terraform creates and manages resources on cloud platform and other services through their APIs. Providers enable Terraform to work with virtually any platform or service with an accessible API.
+
+**Providers are a logical abstraction of an upstream API. They are responsible for understanding API interactions and exposing resources.**
+Providers supported by Terraform, there are officially 130 providers supported by Terraform:
+- AWS
+- Azure
+- Google Cloud Platform
+- Kubernetes and so on
+
+
+
+
+## Install Terraform
+
+##### Windows
+
+[Download Terraform](https://developer.hashicorp.com/terraform/downloads)
+```
+Extract the executable to a directory (E.g. c:\terraform)
+Go to Environment variable and update the system variables in the PATH
+```
 
 ##### Ubuntu/Debian
 ```
@@ -23,9 +57,27 @@ sudo yum -y install terraform
 ```
 terraform version
 ```
+*Resources are the most important element in the Terraform language. Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances, or higher-level components such as DNS records.*
+*Terraform configuration files are written in HCL to deploy infrastructure resources, these files have .tf extentiuons*
 
-*Terraform configuration files are written in HCL to deploy infrastructure resources, this files have .tf extentiuons*
+#### Let's get started with Terraform
 
+To use AWS provider and creating AWS infrastructure we need to comfigure AWS CLI
+- Install AWS CLI
+- Check version :  aws --version
+- Create User with permission and configure AWS Access Key and Secret Access Key
+
+ Follow [this article](https://palak-bhawsar.hashnode.dev/launch-an-ec2-instance-using-terraform) to configure AWS CLI
+
+- Create any folder 
+```
+mkdir terraform-project
+```
+- Change into this directory
+```
+cd terraform-project
+```
+- Create providers.tf file to define provider
 #### To specify specific version of the provider, use required_providers block under terraform.
 ```
 terraform {
@@ -37,55 +89,61 @@ terraform {
   }
 }
 ```
-- **HCL Basics** (HashiCorp Configuration Language)
+- Create ec2.tf file to launch an Instance
 ```
-<block> <parameters> {
-  key1 = value1
-  key2 = value2
+resource "aws_instance" "my_ec2_instance" {
+  ami           = "ami-08c40ec9ead489470"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "FirstEC2Instnace"
+  }
 }
 ```
-- Example of resource file for provisioning AWS EC@ Instance
-```
-resource "aws-instance" "webserver" {
-     ami = "ami-096544567687980"
-     instance_type = 't2.micro"
-}     
-```
-- Create a configuration file with .tf extensions
 
-- This command will check the configuration file and initialize the   working directory containing   the .tf file.
+**Typical Terraform workflow involves 3 steps - Write, Plan, and Apply**
+
+- This command will check the configuration file and initialize the working directory containing the .tf file and install the required plugins for provider.
 ```
 terraform init 
 ```
-- This command  will show the actions that carried out by terraform to create     the resource.
+- This command  will show the actions that carried out by terraform to create the resource.
 ```
 terraform plan
 ```
-- This command will show the actions and asked user to type yes.
+- This command executes the actions proposed in a terraform plan. It is used to deploy your infrastructure and will ask user to type yes.
 ```
 terraform apply
 ```
-- This command will show the resources we have created.
-```
-terraform show
-```
-- To Update resources, edit the .tf file and run
-```
-terraform apply
-```
-- To destroy the infrasytructure
-```
-terraform destroy 
-```
+#### What is Terraform state file?
+
+When we create infrastructure after executing "terraform apply" command. Terraform creates a state file called **terraform.tfstate** this state files contains all the information about the resources created using terraform. This state file keeps track of resources created by your configuration and maps them to real-world resources. State file is sensitive file as it contains information about the infrastruture that we have created. You should never push this file to any version control system like GitHub. 
+Store terrfaorm.tfstate file in backend to keep it safe.
+
+**The backend supported by Terraform:**
+
+- Amazon S3
+- Azure Storage
+- Google Cloud Storage
+- HashiCorp’s Terraform Cloud and Terraform Enterprise.
+
 ##### Variables in terraform
 
-varibles can be defined in variables .tf file and can be used in configuration files as **var.variable_name**
+varibles can be defined in variables.tf file and can be used in configuration files as **var.variable_name**
 
 ##### Types of variables
 - string ("file")
 - bool (true/false)
 - number (7)
 - any (Default value)
+
+The type constructors allow you to specify complex types such as collections:
+
+- list(<TYPE>)
+- set(<TYPE>)
+- map(<TYPE>)
+- object({<ATTR NAME> = <TYPE>, ... })
+- tuple([<TYPE>, ...])
 
 
 ##### How to define variables in variables.tf file using parameter (default, type, and description)
@@ -97,9 +155,23 @@ variable "filename" {
    sensitive = false
    }
 ```
-##### Define envtronment variables in terraform.tfvars or terraform.tfvars.json
+**Define envtronment variables in terraform.tfvars or terraform.tfvars.json**
 
-- This command  will show the sysntax used is correct or not
+#### Terraform Commands
+
+- This command will initialize the working directory containing Terraform configuration files and install any required plugins.
+```
+terraform init
+```
+- This command lets you preview the actions Terraform would take to modify your infrastructure or save a speculative plan which you can apply later.
+```
+terraform plan
+```
+- This command executes the actions proposed in a terraform plan. It is used to deploy your infrastructure. Typically apply should be run after terraform init and terraform plan. Enter yes when prompted "Enter a value:".
+```
+terraform apply
+```
+- This command  will show the syntax used is correct or not
 ```
 terraform validate
 ```
@@ -123,9 +195,18 @@ terraform output
 ```
 terraform refresh
 ```
+- This command will show the resources we have created.
+```
+terraform show
+```
+- To destroy the infras tructure
+```
+terraform destroy 
+```
+
 #### Terraform Lifecycle Rule
 
-- This is used in configuration file when you don't want your resources to ve dlete before creation of new resources
+- This is used in configuration file when you don't want your resources to delete before creation of new resources
 ```
 lifecycle {
    create_before_destroy = true
@@ -148,7 +229,7 @@ provider "aws" {
 
 ```
 #### Output Variables in Terraform
-Output variables are used to store the vallue of expression in terraform
+Output variables are used to store the value of expression in terraform
 ```
 output "public_ip_addr" {
    value = aws_instance.jenkinsserver.public_ip
@@ -161,3 +242,8 @@ depends_on = [
      aws_instance.jenkins
      ]
 ```
+
+#### Terraform hands-on
+
+- https://palak-bhawsar.hashnode.dev/launch-an-ec2-instance-using-terraform
+- https://palak-bhawsar.hashnode.dev/terraform-create-vpc-subnets-and-ec2-instances-in-multiple-availability-zones
