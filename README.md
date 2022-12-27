@@ -1,4 +1,4 @@
-# Terraform
+![download (2)](https://user-images.githubusercontent.com/69889600/209645792-ae792327-304a-4e0a-b841-8fe7aac8762e.jpg)
 
 ## What is Terraform?
 - Terraform is an open-source infrastructure as a code tool created by HashiCorp, that lets you provision, build, change, and version cloud and on-prem resources. It let's you define both Cloud and on-prem resources in human readable configuration files that you can version, reuse, and share.
