@@ -1,8 +1,8 @@
 terraform {
   backend "remote" {
-    organization = "organization-name"
+    organization = "palak-terraform-oragnization"
     workspaces {
-      name = "terraform-backend-handson"
+      name = "terraform-remote-state"
     }
   }
 
@@ -16,10 +16,10 @@ terraform {
 
 
 provider "aws" {
-  region  = "us-west-2"
+  region  = "us-east-1"
 }
 
 resource "aws_instance" "jenkins_server" {
-  ami           = var.ami-name
-  instance_type = var.instance-size
+  ami           = "ami-0b5eea76982371e91"
+  instance_type = "t2.micro"
 }
